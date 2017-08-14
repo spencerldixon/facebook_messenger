@@ -80,6 +80,7 @@ defmodule FacebookMessenger.Response do
     cond do
       Map.has_key?(messaging, "postback") -> postback_parser
       Map.has_key?(messaging, "message") -> text_message_parser
+      Map.has_key?(messaging, "account_linking") -> account_linking_parser
     end
   end
 
@@ -97,6 +98,15 @@ defmodule FacebookMessenger.Response do
   end
 
   defp text_message_parser do
+    %FacebookMessenger.Messaging{
+      "type": "message",
+      "sender": %FacebookMessenger.User{},
+      "recipient": %FacebookMessenger.User{},
+      "message": %FacebookMessenger.Message{}
+    }
+  end
+
+  defp account_linking_parser do
     %FacebookMessenger.Messaging{
       "type": "message",
       "sender": %FacebookMessenger.User{},
